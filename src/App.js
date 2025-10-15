@@ -1,68 +1,51 @@
 import { useEffect, useState } from "react";
+import { getSeasonStandings } from "./api/getSeasonStandings";
+import Table from "./components/table";
 
 export default function App() {
-  const [table, setTable] = useState([]);
+  const [standings, setStandings] = useState(null);
+  const [season, setSeason] = useState("2025");
+  const [matchday, setMatchday] = useState(38);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    async function getTable() {
-      try {
-        const res = await fetch("http://localhost:5000/api/table");
-        const data = await res.json();
-
-        const standingsTable = data.standings[0].table;
-        setTable(standingsTable);
-      } catch (err) {
-        console.error("Błąd pobierania danych:", err);
+    async function fetchData() {
+      setLoading(true);
+      const data = await getSeasonStandings(season, matchday);
+      console.log(data);
+      if (data) {
+        setStandings(data.standings?.[0]?.table || []);
       }
+      setLoading(false);
     }
 
-    getTable();
-  }, []);
+    fetchData();
+  }, [season,matchday]);
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Premier League Standings</h1>
-      <div>
-        <table className="min-w-full border border-gray-300">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="px-4 py-2 border">#</th>
-              <th className="px-4 py-2 border">Team</th>
-              <th className="px-4 py-2 border">Played</th>
-              <th className="px-4 py-2 border">Won</th>
-              <th className="px-4 py-2 border">Draw</th>
-              <th className="px-4 py-2 border">Lost</th>
-              <th className="px-4 py-2 border">GF</th>
-              <th className="px-4 py-2 border">GA</th>
-              <th className="px-4 py-2 border">GD</th>
-              <th className="px-4 py-2 border">Points</th>
-            </tr>
-          </thead>
-          <tbody>
-            {table.map((team) => (
-              <tr key={team.team.id} className="hover:bg-gray-50">
-                <td className="px-4 py-2 border text-center">{team.position}</td>
-                <td className="px-4 py-2 border flex items-center gap-2">
-                  <img
-                    src={team.team.crest}
-                    alt={team.team.name}
-                    className="w-6 h-6 object-contain"
-                  />
-                  {team.team.name}
-                </td>
-                <td className="px-4 py-2 border text-center">{team.playedGames}</td>
-                <td className="px-4 py-2 border text-center">{team.won}</td>
-                <td className="px-4 py-2 border text-center">{team.draw}</td>
-                <td className="px-4 py-2 border text-center">{team.lost}</td>
-                <td className="px-4 py-2 border text-center">{team.goalsFor}</td>
-                <td className="px-4 py-2 border text-center">{team.goalsAgainst}</td>
-                <td className="px-4 py-2 border text-center">{team.goalDifference}</td>
-                <td className="px-4 py-2 border text-center">{team.points}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <div className="p-6">
+      <h1 className="text-3xl font-bold mb-6 text-center">Premier League Standings</h1>
+
+      <div className="flex justify-center items-center gap-4 mb-6">
+  <select
+    value={season}
+    onChange={(e) => setSeason(e.target.value)}
+    className="border p-2 rounded-md text-lg"
+  >
+    {[2025,2024, 2023, 2022, 2021, 2020, 2019,2018,2017].map((season) => (
+      <option key={season} value={season}>
+        {season}/{season + 1}
+      </option>
+    ))}
+  </select>
+
+  <input type="number"min={1}max={38}placeholder="Matchday"onChange={(e) => setMatchday(Number(e.target.value))}className="border p-2 rounded-md text-lg w-32"/>
+</div>
+
+      {loading && <p className="text-center text-gray-500">Loading...</p>}
+      {!loading && standings && standings.length > 0 && (
+        <Table standings={standings} />
+      )}
     </div>
   );
 }

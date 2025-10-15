@@ -1,25 +1,19 @@
-import { useEffect } from "react";
+export async function getSeasonStandings(season = "2025", matchday = 38) {
+  try {
+  
 
-export default function GetSeasonStandings(){
+    const res = await fetch(`/v4/competitions/PL/standings?season=${season}&matchday=${matchday}`, {
+      headers: {
+        "X-Auth-Token": "35811dfae35243f6a2549f034bcff645",
+      },
+    });
 
-     useEffect(()=>{
-        async function getData(){
-            try{
-                const data = await fetch('https://api.football-data.org/v4/competitions/PL/standings', { 
-    method: 'get',
-    mode: 'no-cors',
-    headers: new Headers({
-        'Access-Control-Allow-Origin': '*', 
-        'Content-Type': 'application/json',
-        'X-Auth-Token' : '35811dfae35243f6a2549f034bcff645'
-    })});
-                const response = await data.json();
-                console.log(response)
-            }
-            catch{
-                console.log("Wystąpił błąd podczas pobierania danych z sezonu")
-            }
-        }
-        getData()
-    },[])
+    if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error("Błąd pobierania danych:", err);
+    return null;
+  }
 }
