@@ -1,4 +1,4 @@
-export default function Table({ standings }) {
+export default function Table({ standings, setViewState }) {
   
   return (
     <div className="overflow-x-auto">
@@ -17,7 +17,7 @@ export default function Table({ standings }) {
             </thead>
             <tbody>
               {standings.map((team) => (
-                <tr key={team.team.id} className="text-center hover:bg-gray-100">
+                <tr key={team.team.id} className="text-center hover:bg-gray-100" onClick={()=>setViewState({view:"teamView",teamView:team.team})}>
                   <td className="py-2 px-4 border">{team.position}</td>
                   <td className="py-2 px-4 border text-left flex items-center gap-2">
                     <img
