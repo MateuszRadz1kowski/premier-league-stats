@@ -1,7 +1,5 @@
-po kliknieciu w dana druzyne pojawiaja sie informacje o druzynie endpoint: /teams/id (lista meczow z informacjami endpoint: /v4/teams/{id}/matches/, ), oblczone jakies dane typu win% itp
 pokazywanie najlepszych strzelcow sezonu
 moze integracja z innymi ligami
-cos z sortowaniem (wymysli sie w jaki sposob zaimplementowac, moze w tabeli po meczach, po wyhgranych itp jak w fm)
-moze dac ulubioną druzyne lub zawodnika i by sie pokazywalo
-losuj losowy matchday z wielu sezonow maybe
 moze widok z meczami
+
+Kod czytelny i skomentowany

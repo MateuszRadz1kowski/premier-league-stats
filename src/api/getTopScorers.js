@@ -1,13 +1,7 @@
-import ResponseFail from "../components/responseFail";
-
-export async function getSeasonStandings(
-	season = "2025",
-	matchday = 38,
-	setError
-) {
+export async function getTopScorers(season, setError) {
 	try {
 		const res = await fetch(
-			`/v4/competitions/PL/standings?season=${season}&matchday=${matchday}`,
+			`/v4/competitions/PL/scorers?season=${season}&limit=10`,
 			{
 				headers: {
 					"X-Auth-Token": "35811dfae35243f6a2549f034bcff645",
