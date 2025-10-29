@@ -23,6 +23,7 @@ export default function App() {
 			console.log(data);
 			if (data) {
 				setStandings(data.standings?.[0]?.table || []);
+				setError(false)
 			}
 			setLoading(false);
 		}

@@ -24,6 +24,7 @@ export default function TeamView({ team, setViewState }) {
 			if (dataTeamInfo && dataTeamRecentMatches) {
 				setTeamInfo(dataTeamInfo);
 				setRecentMatches(dataTeamRecentMatches);
+				setError(false)
 			}
 			setLoading(false);
 		}
